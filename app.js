@@ -4,16 +4,21 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require("morgan");
 const port = 3000;
-const env = require("dotenv")
-env.config();
+const dotenv = require('dotenv')
+dotenv.config({path: './config.env'});
+//const env = require("dotenv")
+//env.config();
 
 
 //const Todo = require('./models/todo')
 const todoRoutes = require('./routes/todo');
 const userRoutes = require('./routes/user');
 
-mongoose.connect( 
- 'mongodb+srv://temp-user:process.env.DB_PASSWORD@temp-cluster.jiz6a.mongodb.net/process.env.DB_NAME?retryWrites=true&w=majority',
+const DB = process.env.DB_CONN.replace(
+  "DB_PASSWORD",
+  process.env.DB_PASSWORD
+)
+mongoose.connect( DB, 
  {
     useNewUrlParser: true,
     useUnifiedTopology: true,
