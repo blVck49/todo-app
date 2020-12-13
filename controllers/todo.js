@@ -3,8 +3,24 @@ const Todo = require('../models/todo');
 
 //get all todos
 exports.todo_get_all = (async(req, res) => {
-    const todos = await Todo.find()
-    res.send(todos)
+    try {
+        const todos = await Todo.find()
+    return res.status(200).send({
+        status_code: 200,
+        data: todos
+    });
+
+} catch (error) {
+    return res.status(500).send({
+        status_code: 500,
+        detail: error.message,
+        message: "Internal server error!",
+
+        request: req.body
+
+
+    });
+}
 })
 
 //get all todos for the day
