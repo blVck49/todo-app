@@ -9,17 +9,6 @@ const port = 3000;
 const dotenv = require('dotenv')
 dotenv.config({path: './config.env'});
 
-//app.use("/static", express.static("public"));
-app.set('views', __dirname + '/views');
-app.use("/static", express.static(path.join(__dirname, './views/public')))
-app.set('view engine', 'ejs')
-app.get('/', (req, res) => {
-  res.render('todo')
-  })
-
-
-
-
 const todoRoutes = require('./routes/todo');
 const userRoutes = require('./routes/user');
 
