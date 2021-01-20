@@ -10,52 +10,54 @@ exports.todo_get_all = (async(req, res) => {
         data: todos
     });
 
-} catch (error) {
-    return res.status(500).send({
-        status_code: 500,
-        detail: error.message,
-        message: "Internal server error!",
-
-        request: req.body
-
-
-    });
-}
+    } catch (error) {
+        return res.status(400).send({
+            status_code: 400,
+            detail: error.message,
+            message: "Bad Request",
+            request: req.body
+            });
+        }
 })
 
-//get all todos for the day
-exports.todo_get_day = (async(req, res) => {
-    const query = {time: 'day'}
-   const todos = await Todo.find(query)
-   res.send(todos)
-})
-
-//get all todos for the week
-exports.todo_get_week = (async(req, res) => {
-    const query = {time: 'week'}
-   const todos = await Todo.find(query)
-   res.send(todos)
-})
-
-//get all todos for the month
-exports.todo_get_month = (async(req, res) => {
-    const query = {time: 'month'}
-   const todos = await Todo.find(query)
-   res.send(todos)
+//get one todo
+exports.todo_get = (async(req, res) => {
+    try{
+        const todo = await Todo.findById(req.params.id);
+        return res.status(200).send({
+            status_code: 200,
+            data: todo,
+        })
+    } catch(error) {
+        return res.status(400).send({
+            status_code: 400,
+            detail: error.message,
+            message: "Bad request",
+            request: req.body
+        })
+    }
 })
 
 //create a todo
 exports.create_todo = (async(req, res) => {
     const todo = new Todo({
-        text: req.body.text,
-        time: req.body.time,
-        isCompleted: req.body.isCompleted
+        
+        todoDetails: req.body.todoDetails,
+        Title: req.body.Title,
     })
     try{
         await todo.save();
-        res.send(todo)
+        return res.status(200).send({
+            status_code: 200,
+            data: todo,
+        })
     } catch (err){
-        res.status(400).send(err)
+        return res.status(400).send({
+            status_code: 400,
+            detail: error.message,
+            message: "Bad Request",
+            request: req.body
+        })
     }
 })
 
@@ -69,9 +71,17 @@ exports.update_todo = (async(req, res) => {
     }
     try {
         await todo.save()
-        res.send(todo)
-    } catch (err){
-        res.send(400, err)
+        return res.status(200).send({
+            status_code: 200,
+            data: todo,
+        })
+    } catch (error){
+        return res.status(400).send({
+            status_code: 400,
+            detail: error.message,
+            message: "Bad Request",
+            request: req.body
+        })
     }
 })
 
@@ -80,11 +90,18 @@ exports.delete_todo = (async(req, res) => {
     const todo = await Todo.findById(req.params.id);
     try {
         await todo.remove();
-        res.send({message: 'Todo has been deleted successfully'})
+        return res.status(200).send({
+            status_code: 200,
+            message: "todo deleted successfully",
+        })
     } catch(err){
-        res.send(400, err)
+        return res.status(400).send({
+            status_code: 400,
+            detail: error.message,
+            message: "Bad Request",
+            request: req.body
+        })
     }
-
 })
 
 

@@ -4,11 +4,14 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require("morgan");
+const path = require('path');
 const port = 3000;
 const dotenv = require('dotenv')
 dotenv.config({path: './config.env'});
 
-app.use("/static", express.static("public"));
+//app.use("/static", express.static("public"));
+app.set('views', __dirname + '/views');
+app.use("/static", express.static(path.join(__dirname, './views/public')))
 app.set('view engine', 'ejs')
 app.get('/', (req, res) => {
   res.render('todo')
