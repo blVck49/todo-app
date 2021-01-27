@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require("morgan");
 const path = require('path');
-const port = 3000;
+const port = 1010;
 const dotenv = require('dotenv')
 dotenv.config({path: './config.env'});
 
