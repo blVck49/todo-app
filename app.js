@@ -5,14 +5,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require("morgan");
 const path = require('path');
-const port = 1010;
 const dotenv = require('dotenv')
 dotenv.config({path: './config.env'});
 
 const todoRoutes = require('./routes/todo');
 const userRoutes = require('./routes/user');
 
-const DB = process.env.DB_CONN.replace(
+const DB = process.env.DATABASE_URL.replace(
   "DB_PASSWORD",
   process.env.DB_PASSWORD
 )
@@ -47,8 +46,5 @@ app.use((req, res, next) => {
   next();
 });
 
-app.listen(port, () => {
-    console.log('server has been started')
-})
 
-//module.exports = app;
+module.exports = app;
