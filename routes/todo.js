@@ -6,6 +6,7 @@ const TodoAuth = require('../middleware/check-auth');
 
 
 //get all todos
+//router.get('/', TodoController.todo_get_all)
 router.get('/', TodoAuth.checkAuth, TodoController.todo_get_all)
 
 //get a todo
