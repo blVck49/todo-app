@@ -24,8 +24,13 @@ jobs:
   publish-latest:
     executor: docker-publisher
     steps:
-      - setup_remote_docker
-      - run:
+       - attach_workspace:
+          at: /tmp/workspace
+       - setup_remote_docker
+       - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+       - run:
           name: Publish Docker Image to Docker Hub
           command: |
             echo "$docker_password" | docker login -u "$docker_username" --password-stdin
