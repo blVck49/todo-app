@@ -1,5 +1,5 @@
 version: 2.1
-exexutors:
+executors:
   docker-publisher:
     environment:
       IMAGE_NAME: blvck49/build-01
