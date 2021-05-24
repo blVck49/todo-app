@@ -1,4 +1,5 @@
 version: 2.1
+#type of executor (windows, macos, docker, machine)
 executors:
   docker-publisher:
     environment:
