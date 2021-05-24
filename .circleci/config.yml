@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Build Docker image
           command: | 
-          docker build -t $IMAGE_NAME:latest .
+            docker build -t $IMAGE_NAME: latest .
       - run:
           name: Archive Docker image
           command: docker save -o image.tar $IMAGE_NAME
@@ -26,7 +26,7 @@ jobs:
     executor: docker-publisher
     steps:
        - attach_workspace:
-          at: /tmp/workspace
+            at: /tmp/workspace
        - setup_remote_docker
        - run:
           name: Load archived Docker image
