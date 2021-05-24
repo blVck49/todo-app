@@ -31,7 +31,7 @@ workflows:
           filters:
             branches:
               only: main
-      - publish-latest
+      - publish-latest:
           requires:
             - build
           filters:
