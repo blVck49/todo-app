@@ -34,7 +34,7 @@ jobs:
        - run:
           name: Publish Docker Image to Docker Hub
           command: |
-            docker login -u "$docker_username" -p "$docker_password" blvck49
+            docker login -u "$docker_username" -p "$docker_password" 
             docker push $IMAGE_NAME:latest
 workflows:
   version: 2
