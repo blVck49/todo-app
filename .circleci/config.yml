@@ -18,11 +18,19 @@ jobs:
             docker build -t $IMAGE_NAME:latest .
       - run:
           name: Archive Docker image
-          command: docker save -o image.tar $IMAGE_NAME
+          command: docker save -o image.tar $IMAGE_NAME 
       - persist_to_workspace:
           root: .
           paths:
           - ./image.tar
+  deploy:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - run:
+          name: Deploy main to Heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git.main
   publish-latest:
     executor: docker-publisher
     steps:
@@ -39,9 +47,15 @@ jobs:
             docker push $IMAGE_NAME:latest
 workflows:
   version: 2
-  build-master:
+  build-deploy:
     jobs:
       - build:
+          filters:
+            branches:
+              only: main
+      - deploy:
+          requires:
+            - build
           filters:
             branches:
               only: main
