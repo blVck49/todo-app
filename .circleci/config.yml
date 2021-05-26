@@ -31,6 +31,7 @@ jobs:
           name: Deploy main to Digital Ocean
           command: |
             ssh -o "StrictHostKeyChecking no" root@104.238.130.168 "cd ~/todo-app; git pull; npm install; npm run dev"
+            echo "Application is ready"
 
   # publish-latest:
   #   executor: docker-publisher
