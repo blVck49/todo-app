@@ -30,7 +30,7 @@ jobs:
       - run:
           name: Deploy main to Digital Ocean
           command: |
-            ssh -o "StrictHostKeyChecking no" user@104.238.130.168 "cd ~/profile-store; git pull; npm install; forever start app.js"
+            ssh -o "StrictHostKeyChecking no" root@104.238.130.168 "cd ~/profile-store; git pull; npm install; forever start app.js"
   publish-latest:
     executor: docker-publisher
     steps:
