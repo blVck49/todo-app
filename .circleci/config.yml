@@ -1,71 +1,85 @@
-version: 2.1
-#types of executor (windows, macos, docker, machine)
-executors:
-  docker-publisher:
-    environment:
-      IMAGE_NAME: blvck49/build-01
-    docker:
-      - image: circleci/buildpack-deps:stretch
-# orbs:
-#   node: circleci/node@4.4.0
-jobs:
-  build:
-    executor: docker-publisher
-    steps:
-      - checkout
-      - setup_remote_docker 
-      - run:
-          name: Build Docker image
-          command: | 
-            docker build -t $IMAGE_NAME:latest .
-      - run:
-          name: Archive Docker image
-          command: docker save -o image.tar $IMAGE_NAME 
-      - persist_to_workspace:
-          root: .
-          paths:
-          - ./image.tar
-  deploy:
-    executor: docker-publisher
-    steps:
-      - checkout
-      - run:
-          name: Deploy main to Digital Ocean
-          command: |
-            ssh -oStrictHostKeyChecking=no - v root@104.238.130.168 "cd ~/todo-app; git pull; npm install; npm run dev" 
+# version: 2.1
+# #types of executor (windows, macos, docker, machine)
+# executors:
+#   docker-publisher:
+#     environment:
+#       IMAGE_NAME: blvck49/build-01
+#     docker:
+#       - image: circleci/buildpack-deps:stretch
+# # orbs:
+# #   node: circleci/node@4.4.0
+# jobs:
+#   build:
+#     executor: docker-publisher
+#     steps:
+#       - checkout
+#       - setup_remote_docker 
+#       - run:
+#           name: Build Docker image
+#           command: | 
+#             docker build -t $IMAGE_NAME:latest .
+#       - run:
+#           name: Archive Docker image
+#           command: docker save -o image.tar $IMAGE_NAME 
+#       - persist_to_workspace:
+#           root: .
+#           paths:
+#           - ./image.tar
+#   deploy:
+#     executor: docker-publisher
+#     steps:
+#       - checkout
+#       - run:
+#           name: Deploy main to Digital Ocean
+#           command: |
+#             ssh -oStrictHostKeyChecking=no - v root@104.238.130.168 "cd ~/todo-app; git pull; npm install; npm run dev" 
 
-  # publish-latest:
-  #   executor: docker-publisher
-  #   steps:
-  #      - attach_workspace:
-  #           at: /tmp/workspace
-  #      - setup_remote_docker
-  #      - run:
-  #         name: Load archived Docker image
-  #         command: docker load -i /tmp/workspace/image.tar
-  #      - run:
-  #         name: Publish Docker Image to Docker Hub
-  #         command: |
-  #           docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" 
-  #           docker push $IMAGE_NAME:latest
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: main
+#   # publish-latest:
+#   #   executor: docker-publisher
+#   #   steps:
+#   #      - attach_workspace:
+#   #           at: /tmp/workspace
+#   #      - setup_remote_docker
+#   #      - run:
+#   #         name: Load archived Docker image
+#   #         command: docker load -i /tmp/workspace/image.tar
+#   #      - run:
+#   #         name: Publish Docker Image to Docker Hub
+#   #         command: |
+#   #           docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" 
+#   #           docker push $IMAGE_NAME:latest
+# workflows:
+#   version: 2
+#   build-deploy:
+#     jobs:
+#       - build:
+#           filters:
+#             branches:
+#               only: main
+#       - deploy:
+#           requires:
+#             - build
+#           filters:
+#             branches:
+#               only: main
+#       # - publish-latest:
+#       #     requires:
+#       #       - build
+#       #       - deploy
+#       #     filters:
+#       #       branches:
+#       #         only: main
+
+version: 2.1
+jobs:
+  build: 
+    docker:
+      - image: circleci/node:7
+    steps:
+      - checkout
+      - run:
+          name: install-dependencies
+          command: npm install
       - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: main
-      # - publish-latest:
-      #     requires:
-      #       - build
-      #       - deploy
-      #     filters:
-      #       branches:
-      #         only: main
+          name: digital-ocean
+          command: ssh -o "StrictHostKeyChecking no" root@104.238.130.168 "cd ~/todo-app; git pull; npm install; forever start app.js"
