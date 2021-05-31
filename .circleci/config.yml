@@ -85,8 +85,8 @@ jobs:
           command: ssh -o "StrictHostKeyChecking no" root@104.238.130.168 "cd ~/todo-app; git pull; npm install; npm start"
 workflows:
   version: 2
-    test:
-      jobs:
-        - build
+  test:
+    jobs:
+      - build
 
 
