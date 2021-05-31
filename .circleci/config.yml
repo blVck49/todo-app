@@ -86,12 +86,12 @@ jobs:
 
 workflows:
   version: 2
-    test:
-      jobs:
-        - build:
-            filters:
-              branches:
-                only: main
+  test:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: main
 
 
 
