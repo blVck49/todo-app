@@ -44,7 +44,7 @@ jobs:
           npm run build
           npm run test
 
-  push_to_Docker Hub:
+  push_to_Docker_Hub:
       # The type of runner that the job will run on
       runs-on: ubuntu-latest
       # build docker image and push to docker hub
