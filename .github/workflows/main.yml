@@ -105,8 +105,8 @@ jobs:
               docker login https://ghcr.io -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
               # Pull the Docker Image 
-              docker pull ghcr.io/${{secret.DOCKERHUB_PROJECT}}/todo-app:latest
+              docker pull ghcr.io/${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
 
               # Run a new container from a new image
-              docker run -d -p 1012:1012 -t ghcr.io/${{secret.DOCKERHUB_PROJECT}}/todo-app:latest
+              docker run -d -p 1012:1012 -t ghcr.io/${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
 
