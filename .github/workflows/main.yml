@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: setup node
-        uses: actions/setup-node@mater
+        uses: actions/setup-node@master
         with:
           node-version: ${{ matrix.node-version }}
 
