@@ -98,7 +98,7 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             script: |
               # Stop all running Docker Containers
-              docker kill $(docker ps -q)
+              #docker kill $(docker ps -q)
 
               # Login to Github Container Registry
               docker login https://ghcr.io -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
