@@ -91,22 +91,22 @@ jobs:
 
       steps:
         - name: Deploy to Digital Ocean droplet via SSH action
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            # Stop all running Docker Containers
-            docker kill $(docker ps -q)
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USERNAME }}
+            key: ${{ secrets.PRIVATE_KEY }}
+            port: ${{ secrets.PORT }}
+            script: |
+              # Stop all running Docker Containers
+              docker kill $(docker ps -q)
 
-            # Login to Github Container Registry
-            docker login https://ghcr.io -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+              # Login to Github Container Registry
+              docker login https://ghcr.io -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
-            # Pull the Docker Image 
-            docker pull ghcr.io/${{secret.DOCKERHUB_PROJECT}}/todo-app:latest
+              # Pull the Docker Image 
+              docker pull ghcr.io/${{secret.DOCKERHUB_PROJECT}}/todo-app:latest
 
-            # Run a new container from a new image
-            docker run -d -p 1012:1012 -t ghcr.io/${{secret.DOCKERHUB_PROJECT}}/todo-app:latest
+              # Run a new container from a new image
+              docker run -d -p 1012:1012 -t ghcr.io/${{secret.DOCKERHUB_PROJECT}}/todo-app:latest
 
