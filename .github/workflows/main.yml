@@ -96,8 +96,7 @@ jobs:
             host: ${{ secrets.HOST }}
             username: ${{ secrets.USERNAME }}
             key: ${{ secrets.PRIVATE_KEY }}
-            port: 22
-            #port: ${{ secrets.PORT }}
+            port: ${{ secrets.PORT }}
             script: |
               # Stop all running Docker Containers
               docker kill $(docker ps -q)
