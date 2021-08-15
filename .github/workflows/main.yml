@@ -100,7 +100,7 @@ jobs:
               # Stop all running Docker Containers
               #docker kill $(docker ps -a -q --filter="name=elastic_sutherland")
               docker stop elastic_sutherland
-              docker remove elastic_sutherland
+              docker rm elastic_sutherland
 
               # Login to Github Container Registry
               echo ${{secrets.DOCKERHUB_TOKEN}} | docker login -u blvck49 --password-stdin
