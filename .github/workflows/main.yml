@@ -73,15 +73,6 @@ jobs:
             file: ./Dockerfile
             push: true
             tags: ${{ secrets.DOCKERHUB_PROJECT }}/todo-app:latest
-          
-        - name: Run the image in a container
-          uses: addnab/docker-run-action@v3
-          with:
-            image: ${{ secrets.DOCKERHUB_PROJECT }}/todo-app:latest
-            run: |
-              echo "runing the docker image"
-              echo "Testing the nodejs  app endpoints"
-              echo ${{ steps.docker_build.outputs.digest }}
   run_on_container:
       # The type of runner that the job will run on
       runs-on: ubuntu-latest
@@ -101,7 +92,7 @@ jobs:
               #docker kill $(docker ps -q)
 
               # Login to Github Container Registry
-              echo ${{secrets.DOCKERHUB_TOKEN}} | docker login https://ghcr.io -u blvck49 --password-stdin
+              echo "${{secrets.DOCKERHUB_TOKEN}}" | docker login https://ghcr.io -u blvck49 --password-stdin
 
               # Pull the Docker Image 
               docker pull ghcr.io/${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
