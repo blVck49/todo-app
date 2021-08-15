@@ -98,7 +98,8 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             script: |
               # Stop all running Docker Containers
-              #docker kill $(docker ps -q)
+              #docker kill $(docker ps -a -q --filter="name=elastic_sutherland")
+              docker stop elastic_sutherland
 
               # Login to Github Container Registry
               echo ${{secrets.DOCKERHUB_TOKEN}} | docker login -u blvck49 --password-stdin
@@ -107,6 +108,6 @@ jobs:
               docker pull ${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
 
               # Run a new container from a new image
-              docker run -d -p 1012:1012 -t ${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
+              docker run -d -p 1012:1012 --name elastic_sutherland -t ${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
 
 
