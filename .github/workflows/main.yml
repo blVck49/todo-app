@@ -93,10 +93,10 @@ jobs:
         - name: Deploy to Digital Ocean droplet via SSH action
           uses: appleboy/ssh-action@master
           with:
-            host: ${{ secrets.HOST }}
-            username: ${{ secrets.USERNAME }}
-            key: ${{ secrets.PRIVATE_KEY }}
-            port: ${{ secrets.PORT }}
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            key: ${{ secrets.SSH_KEY }}
+            #port: ${{ secrets.PORT }}
             script: |
               # Stop all running Docker Containers
               docker kill $(docker ps -q)
