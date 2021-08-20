@@ -35,6 +35,7 @@ jobs:
       # install application dependencies
       - name: install dependencies
         run: |
+          rm -rf node_modules
           npm install
           npm ci
       # build and test apps
