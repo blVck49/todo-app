@@ -18,7 +18,7 @@ jobs:
   # This workflow contains contain multiple jobs
   build-test:
     # The type of runner that the job will run on
-    runs-on: runs-on: self-hosted
+    runs-on: self-hosted
     strategy:
       matrix:
         node-version: [14.x]
