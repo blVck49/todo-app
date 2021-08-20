@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:14.17.5
 WORKDIR /api
 
 COPY package*.json ./
