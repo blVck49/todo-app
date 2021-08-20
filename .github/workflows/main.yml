@@ -18,7 +18,7 @@ jobs:
   # This workflow contains contain multiple jobs
   build-test:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: runs-on: self-hosted
     strategy:
       matrix:
         node-version: [14.x]
@@ -43,9 +43,10 @@ jobs:
         run: |
           npm run build --if-present
           npm run test
+          
   push_to_Docker_Hub:
       # The type of runner that the job will run on
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       # build docker image and push to docker hub
       # only if the app build and test successfully
       needs: [build-test]
@@ -74,17 +75,9 @@ jobs:
             push: true
             tags: ${{ secrets.DOCKERHUB_PROJECT }}/todo-app:latest
           
-        - name: Run the image in a container
-          uses: addnab/docker-run-action@v3
-          with:
-            image: ${{ secrets.DOCKERHUB_PROJECT }}/todo-app:latest
-            run: |
-              echo "runing the docker image"
-              echo "Testing the nodejs  app endpoints"
-              echo ${{ steps.docker_build.outputs.digest }}
   run_on_container:
       # The type of runner that the job will run on
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       # build docker image and push to docker hub
       # only if the app build and test successfully
       needs: [push_to_Docker_Hub]
@@ -95,17 +88,11 @@ jobs:
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USERNAME }}
             key: ${{ secrets.SSH_KEY }}
+            image: ${{ secrets.DOCKERHUB_PROJECT }}/todo-app:latest
             script: |
               # Stop all running Docker Containers
-              #docker kill $(docker ps -a -q --filter="name=elastic_sutherland")
               docker stop elastic_sutherland
               docker rm elastic_sutherland
-
-              # Login to Github Container Registry
-              echo ${{secrets.DOCKERHUB_TOKEN}} | docker login -u blvck49 --password-stdin
-
-              # Pull the Docker Image 
-              docker pull ${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
 
               # Run a new container from a new image
               docker run -d -p 1012:1012 --name elastic_sutherland -t ${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
