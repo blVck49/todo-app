@@ -1,0 +1,69 @@
+          
+        - name: Run the image in a container
+          uses: addnab/docker-run-action@v3
+          with:
+            image: ${{ secrets.DOCKERHUB_PROJECT }}/todo-app:latest
+            run: |
+              echo "runing the docker image"
+              echo "Testing the nodejs  app endpoints"
+              echo ${{ steps.docker_build.outputs.digest }}
+
+                            #docker run -d -p 80:8080 -p 443:443 -t ghcr.io/${{ secrets.DOCKERHUB_PROJECT}}/todo-app:latest
+
+  run_on_container:
+      # The type of runner that the job will run on
+      runs-on: ubuntu-latest
+      # build docker image and push to docker hub
+      # only if the app build and test successfully
+      needs: [push_to_Docker_Hub]
+      steps:
+        - name: Deploy to Digital Ocean droplet via SSH action
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            key: ${{ secrets.SSH_KEY }}
+            script: |
+              # Stop all running Docker Containers
+              docker stop elastic_sutherland
+              docker rm elastic_sutherland
+
+              # Login to Github Container Registry
+              echo ${{secrets.DOCKERHUB_TOKEN}} | docker login -u blvck49 --password-stdin
+
+              # Pull the Docker Image 
+              docker pull ${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
+
+              # Run a new container from a new image
+              docker run -d -p 1012:1012 --name elastic_sutherland -t ${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
+
+
+        - name: Run the image in a container
+          with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            key: ${{ secrets.SSH_KEY }}
+            image: ${{ secrets.DOCKERHUB_PROJECT }}/todo-app:latest
+                        script: |
+              # Stop all running Docker Containers
+              docker stop elastic_sutherland
+              docker rm elastic_sutherland
+
+              # Login to Github Container Registry
+              echo ${{secrets.DOCKERHUB_TOKEN}} | docker login -u blvck49 --password-stdin
+
+              # Pull the Docker Image 
+              docker pull ${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
+
+              # Run a new container from a new image
+              docker run -d -p 1012:1012 --name elastic_sutherland -t ${{secrets.DOCKERHUB_PROJECT}}/todo-app:latest
+
+            run: |
+              echo "runing the docker image"
+              echo "Testing the nodejs  app endpoints"
+              echo ${{ steps.docker_build.outputs.digest }}
+  run_on_container:
+
+              host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            key: ${{ secrets.SSH_KEY }}
