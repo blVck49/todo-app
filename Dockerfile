@@ -1,5 +1,5 @@
 FROM node:14.17.5
-WORKDIR /api
+WORKDIR /
 
 COPY package*.json ./
 
