@@ -56,10 +56,7 @@ jobs:
   run_on_container:
       # The type of runner that the job will run on
       runs-on: self-hosted
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
+
       # build docker image and push to docker hub
       # only if the app build and test successfully
       needs: [push_to_Docker_Hub]
@@ -67,6 +64,9 @@ jobs:
         - name: Deploy to Digital Ocean droplet via SSH action
           uses: appleboy/ssh-action@master
           with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            key: ${{ secrets.SSH_KEY }}
             image: ${{ secrets.DOCKERHUB_PROJECT }}/todo-app:latest
             script: |
               # Stop all running Docker Containers
