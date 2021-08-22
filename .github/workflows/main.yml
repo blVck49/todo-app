@@ -84,9 +84,6 @@ jobs:
         - name: Deploy to Digital Ocean droplet via SSH action
           uses: appleboy/ssh-action@master
           with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USERNAME }}
-            key: ${{ secrets.SSH_KEY }}
             image: ${{ secrets.DOCKERHUB_PROJECT }}/todo-app:latest
             script: |
               # Stop all running Docker Containers
