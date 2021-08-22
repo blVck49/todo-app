@@ -59,6 +59,7 @@ jobs:
 
       # build docker image and push to docker hub
       # only if the app build and test successfully
+      
       needs: [push_to_Docker_Hub]
       steps:
         - name: Deploy to Digital Ocean droplet via SSH action
